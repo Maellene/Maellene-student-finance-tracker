@@ -1,0 +1,29 @@
+[
+    {
+        "id": "txn_001",
+        "description": "Lunch at cafeteria",
+        "amount": -12.50,
+        "category": "Food",
+        "date": "2025-10-10",
+        "createdAt": "2025-10-10T12:00:00Z",
+        "updatedAt": "2025-10-10T12:00:00Z"
+    },
+    {
+        "id": "txn_002",
+        "description": "Chemistry textbook",
+        "amount": -89.99,
+        "category": "Books",
+        "date": "2025-10-08",
+        "createdAt": "2025-10-08T10:30:00Z",
+        "updatedAt": "2025-10-08T10:30:00Z"
+    },
+    {
+        "id": "txn_003",
+        "description": "Part-time job payment",
+        "amount": 250.00,
+        "category": "Income",
+        "date": "2025-10-05",
+        "createdAt": "2025-10-05T16:00:00Z",
+        "updatedAt": "2025-10-05T16:00:00Z"
+    }
+]
