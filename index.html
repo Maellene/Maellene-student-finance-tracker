@@ -1,17 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student Finance Tracker</title>
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header>
     <div class="brand">
       <h1>Finance Tracker</h1>
       <p>Keep track of your budget</p>
     </div>
+
     <nav>
       <button class="nav-btn active" data-target="dashboard">Dashboard</button>
       <button class="nav-btn" data-target="records">Records</button>
@@ -23,87 +26,132 @@
 
   <main id="main">
     <!-- Dashboard -->
-    <section id="dashboard" class="panel active">
-      <h2>Dashboard</h2>
-      <div class="stats">
-        <div>Total Records: <span id="totalCount">0</span></div>
-        <div>Total Spent: <span id="totalSum">RWF 0.00</span></div>
-        <div>Top Category: <span id="topCat">—</span></div>
-        <div>Remaining: <span id="leftCap">RWF 0.00</span></div>
+    <section id="dashboard" class="panel active" aria-labelledby="dash-h">
+      <h2 id="dash-h">Dashboard</h2>
+      <div class="dashboard-stats" role="region" aria-label="Summary statistics">
+        <div class="stat-item">
+          <p class="stat-label">Total Records:</p>
+          <p class="stat-value" id="totalCount">0</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-label">Total Spent:</p>
+          <p class="stat-value" id="totalSum">RWF 0.00</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-label">Top Category:</p>
+          <p class="stat-value" id="topCat">—</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-label">Remaining:</p>
+          <p class="stat-value" id="remainingCap">RWF 0.00</p>
+        </div>
       </div>
+
+      <div id="capStatus" role="status" aria-live="polite" class="sr-only"></div>
     </section>
 
     <!-- Records -->
-    <section id="records" class="panel">
-      <h2>Records</h2>
-      <table>
+    <section id="records" class="panel" aria-labelledby="records-h">
+      <h2 id="records-h">Records</h2>
+
+      <div class="search-sort">
+        <input id="searchInput" placeholder="Regex search" />
+        <button id="toggleCase" title="Toggle case sensitive (Aa)">Aa</button>
+
+        <div class="sorts">
+          <button id="sortDate">Date ⇵</button>
+          <button id="sortDesc">Description ⇵</button>
+          <button id="sortAmt">Amount ⇵</button>
+        </div>
+      </div>
+
+      <table aria-describedby="records-h">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Actions</th>
+            <th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="recordsTable"></tbody>
       </table>
-      <div id="noRecords">No transactions yet.</div>
+      <div id="noRecords" class="empty">No transactions yet.</div>
     </section>
 
     <!-- Add/Edit Form -->
-    <section id="form" class="panel">
-      <h2>Add / Edit Transaction</h2>
+    <section id="form" class="panel" aria-labelledby="form-h">
+      <h2 id="form-h">Add your Transaction</h2>
       <form id="txnForm" novalidate>
         <input type="hidden" id="txnId">
-        <label>Description</label>
-        <input id="desc" required>
-        <label>Amount (RWF)</label>
-        <input id="amt" type="number" required>
-        <label>Category</label>
-        <input id="cat" required>
-        <label>Date</label>
-        <input id="dt" type="date" required>
+
+        <label for="desc">Description</label>
+        <input id="desc" autocomplete="off" />
+        <div class="error" id="err-desc" aria-live="polite"></div>
+
+        <label for="amt">Amount </label>
+        <input id="amt" inputmode="decimal" />
+        <div class="error" id="err-amt" aria-live="polite"></div>
+
+        <label for="cat">Category</label>
+        <input id="cat" />
+        <div class="error" id="err-cat" aria-live="polite"></div>
+
+        <label for="dt">Date</label>
+        <input id="dt" type="date" />
+        <div class="error" id="err-dt" aria-live="polite"></div>
+
         <div class="actions">
-          <button type="submit">Save</button>
-          <button type="button" id="resetForm">Reset</button>
+          <button id="saveBtn" type="submit">Save</button>
+          <button id="resetBtn" type="button">Reset</button>
         </div>
       </form>
     </section>
 
-<!-- Settings -->
-<section id="settings" class="panel">
-  <h2>Settings</h2>
-  
-  <label>Monthly Cap (Your monthly budget):
-    <input type="number" id="cap" step="0.01" min="0">
-  </label>
+    <!-- Settings -->
+    <section id="settings" class="panel" aria-labelledby="set-h">
+      <h2 id="set-h">Settings</h2>
 
-  <label>Default Currency:
-    <select id="currency">
-      <option value="RWF">RWF - Rwandan Franc</option>
-      <option value="USD">USD - US Dollar</option>
-      <option value="EUR">EUR - Euro</option>
-    </select>
-  </label>
+      <label>Monthly Cap (Yearly/monthly budget)
+        <input id="cap" type="number" step="0.01" min="0" />
+      </label>
 
-  <button id="saveSettings">Save Settings</button>
-</section>
+      <label>Default Currency
+        <select id="currency">
+          <option value="RWF">RWF - Rwandan Franc</option>
+          <option value="USD">USD - US Dollar</option>
+          <option value="EUR">EUR - Euro</option>
+        </select>
+      </label>
 
+      <label>Manual rates (1 base = X other)
+        <input id="rateUSD" placeholder="USD rate (e.g. 0.00093)" />
+        <input id="rateEUR" placeholder="EUR rate (e.g. 0.00085)" />
+      </label>
+
+      <div class="actions">
+        <button id="saveSettings">Save Settings</button>
+        <button id="resetSettings">Reset Settings</button>
+      </div>
+
+      <hr />
+
+      <h3>Data (JSON)</h3>
+      <input id="importFile" type="file" accept="application/json" />
+      <div class="actions">
+        <button id="importBtn">Import JSON</button>
+        <button id="exportBtn">Export JSON</button>
+      </div>
+    </section>
 
     <!-- About -->
-    <section id="about" class="panel">
-      <h2>About</h2>
-      
-        <p>This is a simple Student Finance Tracker helps students manage their
+    <section id="about" class="panel" aria-labelledby="about-h">
+      <h2 id="about-h">About</h2>
+      <p> Student finance tracker helps students manage their
         daily income and expenses in a simple way. You can add, edit, delete,
-        and view your transactions with totals for income, expenses, and remaining.</p>
-
-        <p>Contact: <a href="mailto:m.mpinganzi@alustudent.com">m.mpinganzi@alustudent.com</a></p>
-        <p>GitHub link: <a href="https://github.com/Maellene"> Maellene</a></p>
+        and view your transactions with totals for income, expenses, and balance.</p>
+      <p><strong>Contact:</strong> <a href="mailto:m.mpinganzi@alustudent.com">m.mpinganzi@alustudent.com</a></p>
+      <p><strong>GitHub Name:</strong> <a href="https://github.com/Maellene"> Maellene</a></p>
     </section>
   </main>
 
-  <script src="main.js" defer></script>
+  <script src="main.js"></script>
 </body>
 </html>

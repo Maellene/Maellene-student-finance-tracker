@@ -34,4 +34,5 @@ Testing
 
 4. Reload the page to confirm data is saved.
 
-YOUTUBELINK:  https://youtu.be/qcERJYpLXc8
+Youtube link:  https://youtu.be/qcERJYpLXc8
+Deployed github pages link: https://maellene.github.io/Maellene-student-finance-tracker/
